@@ -26,6 +26,8 @@ public class Projectile {
 
     public void  increaseTime(double changeTime) {time += changeTime; }
 
+    public double getTime(){return time;}
+
     @Override
     public String toString() { return time + " : (" + String.format("%.4f", getX()) + ", " + String.format("%.4f", getY()) + ")"; }
 }
