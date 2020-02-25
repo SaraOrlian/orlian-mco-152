@@ -8,11 +8,18 @@ public class Cashier {
         this.cashRegister = cashRegister;
     }
 
-    public Cash pay(double price, Cash customerPay) {
+    public Cash pay(double price, Cash customerPay) throws NotEnoughChangeException{
+        if(cashRegister.totalCash() == 0) {
+            throw new NotEnoughChangeException();
+        }
         cashRegister = addToRegister(customerPay, cashRegister);
         double change = (customerPay.totalCash()) - price;
         change = Math.round(change * 100.0) / 100.0;
-        return cashierReturn(change, cashRegister);
+        Cash cashierTocustomer = cashierReturn(change, cashRegister);
+        if (cashierTocustomer.totalCash() != change) {
+            throw new NotEnoughChangeException();
+        }
+        return cashierTocustomer;
     }
 
     // Putting the Cash the customer payed into the CashRegister

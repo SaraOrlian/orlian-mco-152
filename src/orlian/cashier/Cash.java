@@ -18,6 +18,8 @@ public class Cash {
     private double tenDollars;
     private double twentyDollars;
 
+    public Cash(){}
+
     public Cash(int numPennies, int numNickels, int numDimes, int numQuarters, int numDollars, int numFiveDollars, int numTenDollars, int numTwentyDollars) {
         pennies = numPennies*PENNY;
         nickels = numNickels*NICKEL;
