@@ -147,4 +147,36 @@ public class Cash {
     public double getTwentyDollars() {
         return twentyDollars;
     }
+
+    public void setPennies(double pennies) {
+        this.pennies = pennies;
+    }
+
+    public void setNickels(double nickels) {
+        this.nickels = nickels;
+    }
+
+    public void setDimes(double dimes) {
+        this.dimes = dimes;
+    }
+
+    public void setQuarters(double quarters) {
+        this.quarters = quarters;
+    }
+
+    public void setDollars(double dollars) {
+        this.dollars = dollars;
+    }
+
+    public void setFiveDollars(double fiveDollars) {
+        this.fiveDollars = fiveDollars;
+    }
+
+    public void setTenDollars(double tenDollars) {
+        this.tenDollars = tenDollars;
+    }
+
+    public void setTwentyDollars(double twentyDollars) {
+        this.twentyDollars = twentyDollars;
+    }
 }

@@ -1,6 +1,6 @@
 package orlian.cashier;
 
-public class Cashier {
+public class Cashier{
 
     private Cash cashRegister;
 
@@ -9,18 +9,39 @@ public class Cashier {
     }
 
     public Cash pay(double price, Cash customerPay) throws NotEnoughChangeException{
+        Cash originalCashRegister = new Cash();
+        originalCashRegister = beforeTransaction(cashRegister, originalCashRegister);
+        double change = (customerPay.totalCash()) - price;
         if(cashRegister.totalCash() == 0) {
             throw new NotEnoughChangeException();
         }
-        cashRegister = addToRegister(customerPay, cashRegister);
-        double change = (customerPay.totalCash()) - price;
-        change = Math.round(change * 100.0) / 100.0;
-        Cash cashierTocustomer = cashierReturn(change, cashRegister);
-        if (cashierTocustomer.totalCash() != change) {
-            throw new NotEnoughChangeException();
+        try {
+            cashRegister = addToRegister(customerPay, cashRegister);
+            change = Math.round(change * 100.0) / 100.0;
+            Cash cashierTocustomer = cashierReturn(change, cashRegister);
+            if (cashierTocustomer.totalCash() != change) {
+                throw new NotEnoughChangeException();
+            }
+            return cashierTocustomer;
+
+        } catch(NotEnoughChangeException exception){ // If there is not enough change, the CashRegister is returns to it's initial state
+            cashRegister = originalCashRegister;
+            return cashRegister;
         }
-        return cashierTocustomer;
     }
+
+    public Cash beforeTransaction(Cash cashRegister, Cash originalCashRegister){
+            originalCashRegister.setTwentyDollars(cashRegister.getTwentyDollars());
+            originalCashRegister.setTenDollars(cashRegister.getTenDollars());
+            originalCashRegister.setFiveDollars(cashRegister.getFiveDollars());
+            originalCashRegister.setDollars(cashRegister.getDollars());
+            originalCashRegister.setQuarters(cashRegister.getQuarters());
+            originalCashRegister.setDimes(cashRegister.getDimes());
+            originalCashRegister.setNickels(cashRegister.getNickels());
+            originalCashRegister.setPennies(cashRegister.getPennies());
+            return originalCashRegister;
+    }
+
 
     // Putting the Cash the customer payed into the CashRegister
     public Cash addToRegister(Cash cashPay, Cash cashRegister) {
@@ -51,6 +72,7 @@ public class Cashier {
         return cashRegister;
     }
 
+    
 
     // Returns Cash object with the optimal way to pay customer based on cash found in the register,
     // cashCashier represents the way the Cashier should pay the customer
