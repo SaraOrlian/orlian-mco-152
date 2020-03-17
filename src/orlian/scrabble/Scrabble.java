@@ -13,6 +13,8 @@ public class Scrabble {
     HashSet<String> set = new HashSet<String>();
     Iterator<String> itr = set.iterator();
 
+
+
     // read text file into HashSet
     public void readFile(String pathname) throws FileNotFoundException {
         File file = new File(pathname);

@@ -17,7 +17,7 @@ public class ScrabbleFrame extends JFrame {
         setTitle("Scrabble Frame");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        setLayout(new FlowLayout());
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         wordField = new JTextField();
         wordField.setPreferredSize(new Dimension( 160, 40));
@@ -27,6 +27,7 @@ public class ScrabbleFrame extends JFrame {
 
         answerLabel = new JLabel();
         answerLabel.setPreferredSize(new Dimension(100, 40));
+        answerLabel.setOpaque(true);
         add(wordField);
         add(checkButton);
         add(answerLabel);
@@ -37,6 +38,7 @@ public class ScrabbleFrame extends JFrame {
         try {
             dictionary.readFile("src\\orlian\\scrabble\\dictionary.txt");
             boolean isInDictionary = dictionary.isWord(wordField.getText());
+            answerLabel.setBackground(isInDictionary ? Color.GREEN : Color.RED);
             answerLabel.setText(String.valueOf(isInDictionary));
         } catch (FileNotFoundException e){
             e.printStackTrace();
@@ -46,7 +48,6 @@ public class ScrabbleFrame extends JFrame {
     public static void main(String[] args) {
         ScrabbleFrame frame = new ScrabbleFrame();
         frame.setVisible(true);
-
 
 
     }
