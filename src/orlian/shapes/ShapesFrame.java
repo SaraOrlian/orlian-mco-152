@@ -16,17 +16,19 @@ public class ShapesFrame extends JFrame {
 
     Border blackline = BorderFactory.createLineBorder(Color.black);
 
+    ImageIcon trafficLightImage = new ImageIcon(getClass().getResource("trafficLight.png"));
+
 
     public ShapesFrame(){
 
-        setSize(400, 270);
+        setSize(800, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("SHAPES");
 
-        Dimension size = new Dimension(100, 30);
-        panel1.add(createFiller(20, 20));
-        buttons.add(button = createButton("Ice Cream", size));
-        button.addActionListener(actionEvent -> shapeComponent.setShapeIceCreamCone());
+        Dimension size = new Dimension(100, 50);
+        panel1.add(createFiller(20, 80));
+        buttons.add(button = createButton(trafficLightImage, size));
+        button.addActionListener(actionEvent -> shapeComponent.setShapeTrafficLight());
         panel1.add(button);
         panel1.add(createFiller(20, 20));
         buttons.add(button = createButton("Robot", size));
@@ -59,6 +61,14 @@ public class ShapesFrame extends JFrame {
 
 
         add(content);
+    }
+
+    private JButton createButton(Icon icon, Dimension size) {
+        JButton button = new JButton(icon);
+        button.setPreferredSize(size);
+        button.setMinimumSize(size);
+        button.setMaximumSize(size);
+        return button;
     }
 
     private JButton createButton(String text, Dimension size) {
