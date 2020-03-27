@@ -36,7 +36,7 @@ public class ScrabbleFrame extends JFrame {
     public void checkWord() {
         Scrabble dictionary = new Scrabble();
         try {
-            dictionary.readFile("src\\orlian\\scrabble\\dictionary.txt");
+            dictionary.readFile("src/orlian/scrabble/dictionary.txt");
             boolean isInDictionary = dictionary.isWord(wordField.getText());
             answerLabel.setBackground(isInDictionary ? Color.GREEN : Color.RED);
             answerLabel.setText(String.valueOf(isInDictionary));

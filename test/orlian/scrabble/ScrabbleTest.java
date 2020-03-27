@@ -12,7 +12,7 @@ public class ScrabbleTest{
     public void isWord() throws FileNotFoundException {
         // given
         Scrabble scrabble= new Scrabble();
-        scrabble.readFile("src\\orlian\\scrabble\\dictionary.txt");
+        scrabble.readFile("src/orlian/scrabble/dictionary.txt");
 
         // when
         boolean present = scrabble.isWord("ah");
@@ -25,7 +25,7 @@ public class ScrabbleTest{
     public void isWordNotExist() throws FileNotFoundException {
         // given
         Scrabble scrabble= new Scrabble();
-        scrabble.readFile("src\\orlian\\scrabble\\dictionary.txt");
+        scrabble.readFile("src/orlian/scrabble/dictionary.txt");
 
         // when
         boolean present = scrabble.isWord("xyz");
@@ -38,7 +38,7 @@ public class ScrabbleTest{
     public void isWordIgnoreCase() throws FileNotFoundException {
         // given
         Scrabble scrabble= new Scrabble();
-        scrabble.readFile("src\\orlian\\scrabble\\dictionary.txt");
+        scrabble.readFile("src/orlian/scrabble/dictionary.txt");
 
         // when
         boolean present = scrabble.isWord("ah");

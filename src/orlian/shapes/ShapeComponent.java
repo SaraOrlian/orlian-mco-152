@@ -107,7 +107,7 @@ public class ShapeComponent extends JComponent {
         g.drawArc(-29, 42, 40, 40, 180, 180);
     }
 
-    
+
     public void setShapeTrafficLight(){
         shape = "Traffic Light";
         repaint();
