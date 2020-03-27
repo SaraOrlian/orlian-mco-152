@@ -9,8 +9,8 @@ public class Cashier{
     }
 
     public Cash pay(double price, Cash customerPay) throws NotEnoughChangeException{
-        Cash originalCashRegister = new Cash();
-        originalCashRegister = beforeTransaction(cashRegister, originalCashRegister);
+        Cash originalCashRegister = new Cash(cashRegister);
+        //originalCashRegister = beforeTransaction(cashRegister, originalCashRegister);
         double change = (customerPay.totalCash()) - price;
         if(cashRegister.totalCash() == 0) {
             throw new NotEnoughChangeException();
@@ -26,9 +26,10 @@ public class Cashier{
 
         } catch(NotEnoughChangeException exception){ // If there is not enough change, the CashRegister is returns to it's initial state
             cashRegister = originalCashRegister;
-            return cashRegister;
+            throw new NotEnoughChangeException();
         }
     }
+
 
     public Cash beforeTransaction(Cash cashRegister, Cash originalCashRegister){
             originalCashRegister.setTwentyDollars(cashRegister.getTwentyDollars());
@@ -120,6 +121,10 @@ public class Cashier{
             change -= 0.01;
         }
         return cashCashier;
+    }
+
+    public Cash getCashRegister(){
+        return cashRegister;
     }
 
 

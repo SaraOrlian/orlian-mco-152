@@ -31,6 +31,16 @@ public class Cash {
         twentyDollars = numTwentyDollars*TWENTY_DOLLAR;
     }
 
+     public Cash(Cash other) {
+        pennies = other.getPennies();
+        nickels = other.getNickels();
+        dimes = other.getDimes();
+        quarters = other.getQuarters();
+        dollars = other.getDollars();
+        fiveDollars = other.getFiveDollars();
+        tenDollars = other.getTenDollars();
+        twentyDollars = other.getTwentyDollars();
+    }
     public double totalCash()
     {
         return (pennies+nickels+dimes+quarters+dollars+fiveDollars+tenDollars+twentyDollars);

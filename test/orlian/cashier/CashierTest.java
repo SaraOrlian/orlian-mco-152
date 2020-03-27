@@ -40,7 +40,7 @@ public class CashierTest {
     @Test(expected = NotEnoughChangeException.class)
     public void payNotEnoughChange() throws NotEnoughChangeException {
         // given
-        Cash cashRegister = new Cash(0, 0, 0, 100, 0, 0, 0, 0);
+        Cash cashRegister = new Cash(0, 0, 0, 0, 0, 0, 0, 0);
         Cashier cashier = new Cashier(cashRegister);
         Cash cashCustomerPay = new Cash(0, 0, 0, 0, 3, 0, 0, 0);
 
@@ -51,7 +51,7 @@ public class CashierTest {
 
     }
 
-    @Test
+    @Test//(expected = NotEnoughChangeException.class)
     public void payNotEnoughChangeCheckRegister() throws NotEnoughChangeException {
         // given
         Cash cashRegister = new Cash(100, 0, 0, 0, 0, 0, 0, 0);
@@ -59,13 +59,16 @@ public class CashierTest {
         Cash cashCustomerPay = new Cash(0, 0, 0, 0, 3, 0, 0, 0);
 
         // when
-        cashRegister = cashier.pay(2.49, cashCustomerPay);
+        try {
+            Cash returnToCustomer = cashier.pay(2.49, cashCustomerPay);
 
-        // then
-        assertEquals(0, cashRegister.getDollars(), 0.0001);
-        assertEquals(0, cashRegister.getQuarters(), 0.0001);
-        assertEquals(0, cashRegister.getDimes(), 0.0001);
-        assertEquals(0, cashRegister.getNickels(), 0.0001);
-        assertEquals(1, cashRegister.getPennies(), 0.0001);
+            // then
+        } catch (NotEnoughChangeException ex) {
+            assertEquals(0, cashier.getCashRegister().getDollars(), 0.0001);
+            assertEquals(0, cashier.getCashRegister().getQuarters(), 0.0001);
+            assertEquals(0, cashier.getCashRegister().getDimes(), 0.0001);
+            assertEquals(0, cashier.getCashRegister().getNickels(), 0.0001);
+            assertEquals(1, cashier.getCashRegister().getPennies(), 0.0001);
+        }
     }
 }

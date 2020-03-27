@@ -237,16 +237,6 @@ public class CashierFrame extends JFrame {
                 Cash cashReturn = cashier.pay(priceIt, cashCustomerPay);
                 if (priceIt > cashCustomerPay.totalCash()) {
                     change.setText("You did not pay enough to cover the cost");
-                } else if (cashRegister.getPennies() == cashReturn.getPennies() &&
-                        cashRegister.getNickels() == cashReturn.getNickels() &&
-                        cashRegister.getDimes() == cashReturn.getDimes() &&
-                        cashRegister.getQuarters() == cashReturn.getQuarters() &&
-                        cashRegister.getDollars() == cashReturn.getDollars() &&
-                        cashRegister.getFiveDollars() == cashReturn.getFiveDollars() &&
-                        cashRegister.getTenDollars() == cashReturn.getTenDollars() &&
-                        cashRegister.getTwentyDollars() == cashReturn.getTwentyDollars() &&
-                        priceIt != cashCustomerPay.totalCash()) {
-                    change.setText("Error: not enough cash in Register");
                 } else {
                     change.setText(String.valueOf(cashReturn.totalCash()));
                     penniesReg.setText(String.valueOf("$" + cashRegister.getPennies()) + " in pennies");
@@ -259,8 +249,8 @@ public class CashierFrame extends JFrame {
                     twentyDollarsReg.setText(String.valueOf("$" + cashRegister.getTwentyDollars()) + " in twenty dollars");
 
                 }
-            } catch (Exception e) {
-                change.setText("Error occurred during calculation");
+            } catch (NotEnoughChangeException ex) {
+                change.setText("Not enough change in the cash register");
             }
         } catch (Exception ex) {
             change.setText("There was an error with the price");
