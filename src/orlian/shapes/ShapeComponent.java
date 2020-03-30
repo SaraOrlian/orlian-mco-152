@@ -40,10 +40,11 @@ public class ShapeComponent extends JComponent {
         height = getHeight();
         centerX = width / 2;
         centerY = height / 2;
-        g.translate(centerX+x, centerY+0);
+        g.translate(centerX, centerY);
+        //g.translate(centerX+x, centerY+0); used to rotate off screen
         Graphics2D g2d = (Graphics2D) g;
         g2d.rotate(Math.toRadians(rotation));
-        x++;
+        //x++;
         rotation++;
 
         performChoice(g);
