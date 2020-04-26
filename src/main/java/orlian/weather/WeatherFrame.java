@@ -66,36 +66,44 @@ public class WeatherFrame extends JFrame {
 
     public void getWeather() throws IOException {
         URL url = null;
+        //Thread thread = new Thread() {
         try {
-            Integer.parseInt(zipField.getText());
-            if (zipField.getText().length() == 5) {
-                url = new URL("http://api.openweathermap.org/data/2.5/weather?zip=" + zipField.getText() + ",us&appid=77e9f687f947b4ec730e2cce168c2cc1");
+                Integer.parseInt(zipField.getText());
+                if (zipField.getText().length() == 5) {
+                    url = new URL("http://api.openweathermap.org/data/2.5/weather?zip=" + zipField.getText() + ",us&appid=77e9f687f947b4ec730e2cce168c2cc1");
 
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                InputStream in = connection.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    InputStream in = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-                Gson gson = new Gson();
-                CurrentWeather currentWeather = gson.fromJson(reader, CurrentWeather.class);
+                    Gson gson = new Gson();
+                    CurrentWeather currentWeather = gson.fromJson(reader, CurrentWeather.class);
 
-                locationLabel.setText(currentWeather.name);
+                    locationLabel.setText(currentWeather.name);
 
-                tempLabel.setText((int) ((((double) currentWeather.main.temp) - 273.15) * (9.0 / 5) + 32) + " °F");
+                    tempLabel.setText((int) ((((double) currentWeather.main.temp) - 273.15) * (9.0 / 5) + 32) + " °F");
 
-                for (CurrentWeather.Weather weather : currentWeather.weather) {
-                    mainLabel.setText(weather.main.toString());
-                    descriptionLabel.setText(weather.description.toString());
+                    for (CurrentWeather.Weather weather : currentWeather.weather) {
+                        mainLabel.setText(weather.main.toString());
+                        descriptionLabel.setText(weather.description.toString());
+                    }
+                } else {
+                    NumberFormatException e;
                 }
-            } else {
-                NumberFormatException e;
             }
-        }
-        catch (NumberFormatException e)
-        {
-            zipError.setText("Not a valid zip code");
-        }catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        catch(
+            NumberFormatException e)
+
+            {
+                zipError.setText("Not a valid zip code");
+            }catch(
+            MalformedURLException e)
+
+            {
+                e.printStackTrace();
+            }
+        //};
+        //thread.start();
     }
 
     public static void main(String[] args) {

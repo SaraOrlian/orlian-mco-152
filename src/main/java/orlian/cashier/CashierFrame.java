@@ -1,7 +1,5 @@
 package orlian.cashier;
 
-import orlian.scrabble.ScrabbleFrame;
-
 import javax.management.openmbean.InvalidOpenTypeException;
 import javax.swing.*;
 import java.awt.*;
