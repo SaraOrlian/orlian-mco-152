@@ -2,6 +2,12 @@ package orlian.weather;
 
 import com.google.gson.Gson;
 import orlian.earthquakes.CurrentEarthquakes;
+import orlian.earthquakes.EarthquakeService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.*;
 import java.net.URL;
@@ -11,27 +17,35 @@ import java.util.concurrent.Callable;
 public class GetCurrentWeather {
 
     public static void main(String[] args) throws IOException {
-        //URL url = new URL("https://samples.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=b6907d289e10d714a6e88b30761fae22");
-        URL url = new URL("http://api.openweathermap.org/data/2.5/weather?zip=10977,us&appid=77e9f687f947b4ec730e2cce168c2cc1");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        InputStream in = connection.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-        Gson gson = new Gson();
-        CurrentWeather currentWeather = gson.fromJson(reader, CurrentWeather.class);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://api.openweathermap.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        String name = currentWeather.name;
-        System.out.println(currentWeather.name);
+        WeatherService service = retrofit.create(WeatherService.class);
+        String zip = "10977";
+        service.getCurrentWeather(zip).enqueue(new Callback<CurrentWeather>() {
+            @Override
+            public void onResponse(Call<CurrentWeather> call, Response<CurrentWeather> response) {
+                CurrentWeather currentWeather = response.body();
+                for(CurrentWeather.Weather weather : currentWeather.weather) {
+                    String main = weather.main;
+                    System.out.println(weather.main);
+                    String description = weather.description;
+                    System.out.println(weather.description);
+                    }
+                String name = currentWeather.name;
+                System.out.println(currentWeather.name);
+                System.out.println(((int)currentWeather.main.temp) + " " + "\u00B0" +"F");
+            }
 
-        String temp = ((int)((((double)currentWeather.main.temp) - 273.15) * (9.0/5) + 32) + " °F");
-        System.out.println((int)((((double)currentWeather.main.temp) - 273.15) * (9.0/5) + 32) + " °F");
+            @Override
+            public void onFailure(Call<CurrentWeather> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
 
-        for(CurrentWeather.Weather weather : currentWeather.weather) {
-            String main = weather.main.toString();
-            System.out.println(weather.main.toString());
-            String description = weather.description.toString();
-            System.out.println(weather.description.toString());
-        }
     }
 }
 

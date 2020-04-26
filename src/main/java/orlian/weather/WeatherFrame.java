@@ -1,12 +1,15 @@
 package orlian.weather;
 
 import com.google.gson.Gson;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class WeatherFrame extends JFrame {
@@ -17,7 +20,6 @@ public class WeatherFrame extends JFrame {
     private JLabel tempLabel;
     private JLabel mainLabel;
     private JLabel descriptionLabel;
-    private JLabel zipError;
     private JButton getWeatherButton;
 
     public WeatherFrame(){
@@ -45,7 +47,6 @@ public class WeatherFrame extends JFrame {
         tempLabel = new JLabel();
         mainLabel = new JLabel();
         descriptionLabel = new JLabel();
-        zipError = new JLabel();
         locationLabel.setPreferredSize(new Dimension(100, 40));
         tempLabel.setPreferredSize(new Dimension(100, 40));
         mainLabel.setPreferredSize(new Dimension(100, 40));
@@ -61,50 +62,59 @@ public class WeatherFrame extends JFrame {
         add(tempLabel);
         add(mainLabel);
         add(descriptionLabel);
-        add(zipError);
     }
 
     public void getWeather() throws IOException {
         URL url = null;
-        //Thread thread = new Thread() {
         try {
                 Integer.parseInt(zipField.getText());
                 if (zipField.getText().length() == 5) {
-                    url = new URL("http://api.openweathermap.org/data/2.5/weather?zip=" + zipField.getText() + ",us&appid=77e9f687f947b4ec730e2cce168c2cc1");
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("http://api.openweathermap.org/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
 
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    InputStream in = connection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    WeatherService service = retrofit.create(WeatherService.class);
 
-                    Gson gson = new Gson();
-                    CurrentWeather currentWeather = gson.fromJson(reader, CurrentWeather.class);
+                    service.getCurrentWeather(zipField.getText()).enqueue(new Callback<CurrentWeather>() {
+                        @Override
+                        public void onResponse(Call<CurrentWeather> call, Response<CurrentWeather> response) {
+                            CurrentWeather currentWeather = response.body();
 
-                    locationLabel.setText(currentWeather.name);
+                            locationLabel.setText(currentWeather.name);
+                            tempLabel.setText(((int)currentWeather.main.temp) + " " + "\u00B0" +"F");
+                            for(CurrentWeather.Weather weather : currentWeather.weather) {
+                                mainLabel.setText(weather.main);
+                                descriptionLabel.setText(weather.description);
+                            }
+                            }
 
-                    tempLabel.setText((int) ((((double) currentWeather.main.temp) - 273.15) * (9.0 / 5) + 32) + " °F");
-
-                    for (CurrentWeather.Weather weather : currentWeather.weather) {
-                        mainLabel.setText(weather.main.toString());
-                        descriptionLabel.setText(weather.description.toString());
-                    }
-                } else {
-                    NumberFormatException e;
+                        @Override
+                        public void onFailure(Call<CurrentWeather> call, Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+                   } else {  //when zip is not 5 digits
+                    reset();
+                    locationLabel.setText("Not a valid zip code");
                 }
             }
-        catch(
-            NumberFormatException e)
-
+        catch(NumberFormatException e)  //when zip is not a number
             {
-                zipError.setText("Not a valid zip code");
-            }catch(
-            MalformedURLException e)
-
+                reset();
+                locationLabel.setText("Not a valid zip code");
+            }catch(Exception e)
             {
                 e.printStackTrace();
             }
-        //};
-        //thread.start();
-    }
+        }
+
+    public void reset(){
+        locationLabel.setText("");
+        tempLabel.setText("");
+        mainLabel.setText("");
+        descriptionLabel.setText("");
+        }
 
     public static void main(String[] args) {
         WeatherFrame frame = new WeatherFrame();
